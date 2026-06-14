@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nt Function Helper</title>
+  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="prism.css">
+  <link rel="stylesheet" href="prism-vsc-dark-plus.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a href="#" class="brand">
+        <div class="brand__logo">Nt*</div>
+        <div class="brand__text">
+          <span class="brand__title">Nt Function Helper</span>
+          <span class="brand__sub">Windows Native API Reference</span>
+        </div>
+      </a>
+
+      <nav class="nav">
+        <a href="#intro">소개</a>
+        <a href="#workspace">작업 화면</a>
+        <a href="#footer" class="nav__cta">참고 사항</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="intro">
+      <div class="container">
+        <div class="hero__content hero__content--full">
+          <div class="eyebrow">Windows Native API Reference</div>
+
+          <h1>
+            WinAPI → Nt* 함수 대응 정보 조회
+          </h1>
+
+          <p class="lead">
+            WinAPI 호출과 대응되는 Nt* 함수, 관련 구조체 및 주의사항을
+            한 화면에서 확인할 수 있는 Windows 저수준 개발용 인터페이스입니다.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="workspace">
+      <div class="container">
+        <div class="section__header">
+          <div>
+            <h2>작업 화면</h2>
+          </div>
+        </div>
+
+        <div class="grid-main">
+          <section class="panel">
+            <div class="panel__header">
+              <h3 class="panel__title">입력</h3>
+
+              <p class="panel__desc">
+                분석할 WinAPI 함수 또는 코드 스니펫을 입력하세요.
+              </p>
+            </div>
+
+            <div class="panel__body">
+              <div class="form-grid">
+                <div class="field">
+                  <label for="input-code">WinAPI 코드 / 함수 목록</label>
+
+                  <div class="hint">
+                    파일, 메모리, 프로세스 관련 호출 입력 가능
+                  </div>
+
+                  <textarea
+                    id="input-code"
+                    class="textarea"
+                    placeholder="CreateFileW(...)
+ReadFile(...)
+VirtualAlloc(...)
+CreateProcessW(...)"
+                  ></textarea>
+                </div>
+
+                <div class="row-2">
+                  <div class="field">
+                    <label for="arch">대상 아키텍처</label>
+
+                    <select id="arch" class="select">
+                      <option>x64</option>
+                      <option>x86</option>
+                      <option>ARM64</option>
+                    </select>
+                  </div>
+
+                  <div class="field">
+                    <label for="version">Windows 버전</label>
+
+                    <select id="version" class="select">
+                      <option>Windows 11</option>
+                      <option>Windows 10</option>
+                      <option>Windows Server</option>
+                      <option>미지정</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="actions">
+                  <button class="btn btn--primary" id="run-btn" type="button">
+                    결과 확인
+                  </button>
+
+                  <button class="btn btn--danger" id="stop-btn" type="button" hidden>
+                    중단
+                  </button>
+
+                  <button class="btn btn--ghost" id="reset-btn" type="button">
+                    초기화
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel__header">
+              <h3 class="panel__title">결과</h3>
+
+              <p class="panel__desc">
+                대응 Nt* 함수와 구조체, 반환값 정보를 표시합니다.
+              </p>
+            </div>
+
+            <div class="panel__body">
+              <div class="result-stack">
+                <article class="result-card">
+                  <h3>대응 Nt* 함수</h3>
+
+                  <div class="tag-list">
+                    <span class="tag">NtCreateFile</span>
+                    <span class="tag">NtReadFile</span>
+                    <span class="tag">NtAllocateVirtualMemory</span>
+                    <span class="tag">NtCreateUserProcess</span>
+                  </div>
+                </article>
+
+                <article class="result-card">
+                  <h3>함수 매핑</h3>
+
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>WinAPI</th>
+                        <th>Nt*</th>
+                        <th>설명</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      <tr>
+                        <td>CreateFileW</td>
+                        <td>NtCreateFile</td>
+                        <td>파일 생성 및 접근 처리</td>
+                      </tr>
+
+                      <tr>
+                        <td>ReadFile</td>
+                        <td>NtReadFile</td>
+                        <td>I/O 요청 기반 읽기 처리</td>
+                      </tr>
+
+                      <tr>
+                        <td>VirtualAlloc</td>
+                        <td>NtAllocateVirtualMemory</td>
+                        <td>가상 메모리 할당 처리</td>
+                      </tr>
+
+                      <tr>
+                        <td>CreateProcessW</td>
+                        <td>NtCreateUserProcess</td>
+                        <td>프로세스 생성 처리</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </article>
+
+                <article class="result-card">
+                  <h3>참고 사항</h3>
+
+                  <ul class="notice-list">
+                    <li class="notice-item">
+                      <strong>구조체 사용:</strong>
+                      일부 Nt* 함수는 별도의 Native 구조체 사용이 필요합니다.
+                    </li>
+
+                    <li class="notice-item">
+                      <strong>반환값:</strong>
+                      Win32 오류 코드 대신 NTSTATUS 값을 반환합니다.
+                    </li>
+
+                    <li class="notice-item">
+                      <strong>호환성:</strong>
+                      Windows 버전에 따라 내부 동작이 달라질 수 있습니다.
+                    </li>
+                  </ul>
+                </article>
+
+                <article class="result-card">
+                  <h3>코드 영역</h3>
+
+                  <div class="code-box">
+<pre>// 결과를 확인하려면 왼쪽에 WinAPI 함수를 입력하세요.</pre>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" id="footer">
+    <div class="container">
+      <div class="footer__box">
+        <div class="footer__meta">
+          <strong>Nt Function Helper</strong>
+
+          <span>Windows Native API 레퍼런스 도구</span>
+
+          <span>Version 0.1</span>
+        </div>
+
+        <div class="footer__links">
+          <a href="#">GitHub</a>
+          <a href="#">Documentation</a>
+          <a href="#">References</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="cheatsheet.js"></script>
+  <script src="main.js"></script>
+  <script src="prism.js"></script>
+</body>
+</html>
